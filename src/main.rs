@@ -6,11 +6,36 @@ mod solver;
 
 fn main() {
     
-    let boardsize = 30;
+    let mode = 11;
 
-    let body = task::fetch_body();
+    if mode == 12 {
+        panic!("Mode 12 is not supported!");
+    }
+
+    let boardsizes = [
+        6, //6x6 easy
+        6, //6x6 hard
+        8, //8x8 easy
+        8, //8x8 hard
+        10, //10x10 easy
+        10, //10x10 hard
+        14, //14x14 easy
+        14, //14x14 hard
+        20, //20x20 easy
+        20, //20x20 hard
+        24, //24x24 special daily
+        30 //30x30 special weeky
+            // Theoretically 30x40 special monthly, but it's not supported
+        ]; 
+
+    let boardsize = boardsizes[mode as usize];
+
+    let body = task::fetch_body(mode);
     assert!(body.is_ok());
     let body = body.unwrap();
+
+    //Starts measuring the time, because the task is fetched
+    let start = std::time::Instant::now();
 
     let mytask = task::fetch_task(&body);
     let puzzle_id = task::get_puzzle_id(&body);
@@ -38,5 +63,8 @@ fn main() {
     }
 
     utils::print_board(&solution);
+
+    let end = std::time::Instant::now();
+    println!("Time elapsed: {}ms", end.duration_since(start).as_millis());
 }
 

@@ -9,8 +9,9 @@ pub fn fetch_task(body: &str) -> String {
     return task;
 }
 
-pub fn fetch_body() -> Result<String, Box<dyn Error>> {
-    let response = reqwest::blocking::get("https://www.puzzle-binairo.com/?size=11")?.text()?;
+pub fn fetch_body(size: i16) -> Result<String, Box<dyn Error>> {
+    let url = format!("https://www.puzzle-binairo.com/?size={}", size);
+    let response = reqwest::blocking::get(url)?.text()?;
     Ok(response.escape_default().to_string())
 }
 
